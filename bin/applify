@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+require 'highline/import'
+
+## Get the repository which we want to deploy from
+repository = nil
+if File.directory?('.git') && remotes = `git remote -v`
+  repository = remotes.split("\n").first.split(/\s+/)[1]
+else
+  repository = ARGV.first
+end
+
+if repository.nil?
+  puts "usage: appli [repository url]"
+end
+
+puts
+puts "   Creating Capistrano configuration for #{repository}"
+
+template = File.read(File.expand_path("../../doc/Capfile", __FILE__))
+
+puts
+dbhost =  ask("   Database Hostname...........: ")
+dbuser =  ask("   Database Username...........: ")
+dbname =  ask("   Database Name...............: ")
+puts
+ip =      ask("   Enter your server address...: ")
+
+
+template.gsub!("{{dbhost}}", dbhost)
+template.gsub!("{{dbuser}}", dbuser)
+template.gsub!("{{dbname}}", dbname)
+template.gsub!("{{repourl}}", repository)
+template.gsub!("{{ip}}", ip)
+
+if File.exist?("Capfile")
+  puts
+  puts "   \e[31mCapfile already exists.\e[0m"
+  ow = ask("   Do you wish to overwrite....? ")
+  if ow[0] != 'y'
+    Process.exit(1)
+  end
+end
+
+File.open("Capfile", 'w') { |f| f.write(template)}
+puts
+puts "   \e[0mCapfile created successfully!\e[0m"
