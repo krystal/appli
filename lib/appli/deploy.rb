@@ -127,7 +127,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc 'Reset the application'
     task :restart, :roles => [:app] do
-      run "mkdir -p #{deploy_to}/tmp && touch #{deploy_to}/restart.txt"
+      run "mkdir -p #{deploy_to}/tmp && touch #{deploy_to}/tmp/restart.txt"
     end
     
     desc 'Start the application'
