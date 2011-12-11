@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'appli'
-  s.version = "2.0.2"
+  s.version = "2.0.3"
   s.platform = Gem::Platform::RUBY
   s.summary = "Deployment Recipes for Appli"
   s.files = ["bin/applify", "lib/appli/deploy.rb", "doc/Capfile"]
